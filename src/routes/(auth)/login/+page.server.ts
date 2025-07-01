@@ -10,9 +10,8 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { loginSchema } from '$lib/types/form-schema';
 
 export const load: PageServerLoad = async (event) => {
-	// If the user is already logged in, redirect to the home page
+	// Redirect to the home page if the user is already logged in
 	if (event.locals.user) return redirect(302, '/');
-
 	return {
 		form: await superValidate(zod(loginSchema))
 	};
@@ -26,8 +25,6 @@ export const actions: Actions = {
 		const { email, password } = form.data;
 
 		const results = await db.select().from(table.user).where(eq(table.user.email, email));
-
-		console.log(results);
 
 		const existingUser = results.at(0);
 		if (!existingUser) {

@@ -28,8 +28,6 @@ export const actions: Actions = {
 			});
 		}
 
-		console.log('Form was valid!!');
-
 		const email = form.data.email;
 		const password = form.data.password;
 
