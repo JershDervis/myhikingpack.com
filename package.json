@@ -16,7 +16,8 @@
 		"db:start": "docker compose up",
 		"db:push": "drizzle-kit push",
 		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio"
+		"db:studio": "drizzle-kit studio",
+		"db:generate": "drizzle-kit generate --name=%npm_config_name%"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
