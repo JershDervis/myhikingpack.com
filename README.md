@@ -5,8 +5,14 @@ A web application to help you plan your hiking trips by managing your hiking gea
 ## Developing
 
 Once you've created a cloned the project, install its dependencies with `pnpm install`.
+Currently pushing to master automatically builds / deploys to Vercel.
 
-The development database setup uses Docker by default. Make sure you have Docker installed and running before executing `pnpm run db:start`. To browse data within the database you can also run `pnpm run db:studio`.
+## Database
+
+The development database setup uses sqlite by default. To browse data within the database you can also run `pnpm run db:studio`.
+To create/migrate the database: `pnpm run db:migrate`. (This is automatically run prior to building the app.)
+To push schema changes to the database: `pnpm run db:push`. (Useful in dev, to migrate the database as you make changes, solidify your schema changes with the command below.)
+To generate a new migration: `pnpm run db:generate --name=<migration-name>`.
 
 To start a development server:
 
