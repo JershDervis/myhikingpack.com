@@ -7,6 +7,11 @@
 	let { children } = $props();
 </script>
 
+<svelte:head>
+	<title>My Hiking Pack</title>
+	<meta name="description" content="My Hiking Pack" />
+</svelte:head>
+
 <Toaster position="top-center" />
 
 <ModeWatcher defaultMode="system" />
