@@ -8,6 +8,7 @@ export const user = sqliteTable('user', {
 	passwordHash: text('password_hash').notNull(),
 	timezone: text('timezone').notNull().default('Australia/Sydney'),
 	usesImperial: integer('uses_imperial', { mode: 'boolean' }).notNull().default(false),
+	avatar: text('avatar'),
 	createdAt: integer('created_at', { mode: 'timestamp' })
 		.notNull()
 		.default(sql`(CURRENT_TIMESTAMP)`)
@@ -23,31 +24,36 @@ export const session = sqliteTable('session', {
 		.default(sql`(CURRENT_TIMESTAMP)`)
 });
 
-export const review = sqliteTable('review', {
+export const comment = sqliteTable('comment', {
 	id: int('id').primaryKey({ autoIncrement: true }),
+	comment: text('comment').notNull(),
+	createdAt: integer('created_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`),
 	userId: text('user_id')
 		.notNull()
 		.references(() => user.id),
-	rating: int('rating'),
-	review: text('review').notNull(),
-	parentReviewId: int('parent_review_id').references((): AnySQLiteColumn => review.id),
+	parentCommentId: int('parent_comment_id').references((): AnySQLiteColumn => comment.id)
+});
+
+export const commentVote = sqliteTable('comment_vote', {
+	id: int('id').primaryKey({ autoIncrement: true }),
+	commentId: int('comment_id')
+		.notNull()
+		.references(() => comment.id),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
+	upvote: integer('upvote', { mode: 'boolean' }).notNull(),
 	createdAt: integer('created_at', { mode: 'timestamp' })
 		.notNull()
 		.default(sql`(CURRENT_TIMESTAMP)`)
 });
 
-export const reviewVote = sqliteTable('review_vote', {
+export const review = sqliteTable('review', {
 	id: int('id').primaryKey({ autoIncrement: true }),
-	reviewId: int('review_id')
-		.notNull()
-		.references(() => review.id),
-	userId: text('user_id')
-		.notNull()
-		.references(() => user.id),
-	up: integer('up', { mode: 'boolean' }).notNull(),
-	createdAt: integer('created_at', { mode: 'timestamp' })
-		.notNull()
-		.default(sql`(CURRENT_TIMESTAMP)`)
+	rating: int('rating').notNull(),
+	commentId: int('comment_id').references(() => comment.id)
 });
 
 export const company = sqliteTable('company', {
@@ -122,6 +128,17 @@ export const userProduct = sqliteTable('user_product', {
 		.notNull()
 		.references(() => product.id),
 	quantity: int('quantity').notNull().default(1)
+});
+
+export const files = sqliteTable('files', {
+	id: int('id').primaryKey({ autoIncrement: true }),
+	userId: text('user_id').references(() => user.id),
+	fileName: text('file_name').notNull(),
+	fileType: text('file_type').notNull(),
+	fileSize: int('file_size').notNull(),
+	createdAt: integer('created_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(CURRENT_TIMESTAMP)`)
 });
 
 export type Session = typeof session.$inferSelect;
